@@ -31,7 +31,7 @@ import Duckling.Resolve (Resolve(..))
 
 data Grain
   -- NoGrain is helpful to define "now"
-  = NoGrain | Second | Minute | Hour | Day | Week | Month | Quarter | Year
+  = NoGrain | Second | Minute | Hour | Day | Week | Month | Quarter | Year | Century
   deriving (Eq, Generic, Hashable, Ord, Bounded, Enum, Show, NFData)
 
 instance Resolve Grain where
@@ -55,9 +55,9 @@ add utcTime Hour n = Time.addUTCTime (realToFrac $ 3600 * n) utcTime
 add utcTime Day n = updateUTCDay utcTime $ Time.addDays n
 add utcTime Week n = updateUTCDay utcTime . Time.addDays $ 7 * n
 add utcTime Month n = updateUTCDay utcTime $ Time.addGregorianMonthsClip n
-add utcTime Quarter n =
-  updateUTCDay utcTime $ Time.addGregorianMonthsClip $ 3 * n
+add utcTime Quarter n = updateUTCDay utcTime $ Time.addGregorianMonthsClip $ 3 * n
 add utcTime Year n = updateUTCDay utcTime $ Time.addGregorianYearsClip n
+add utcTime Century n = updateUTCDay utcTime $ Time.addGregorianYearsClip $ n * 100
 
 inSeconds :: Num a => Grain -> a -> a
 inSeconds NoGrain n = n
@@ -69,6 +69,7 @@ inSeconds Week    n = n * inSeconds Day 7
 inSeconds Month   n = n * inSeconds Day 30
 inSeconds Quarter n = n * inSeconds Month 3
 inSeconds Year    n = n * inSeconds Day 365
+inSeconds Century n = n * inSeconds Year 100
 
 lower :: Grain -> Grain
 lower NoGrain = Second

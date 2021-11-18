@@ -28,7 +28,7 @@ ruleLatentTempDegrees = Rule
     ]
   , prod = \tokens -> case tokens of
       (Token Temperature td:_) -> Just . Token Temperature $
-        withUnit TTemperature.Degree td
+        withUnit TTemperature.Celsius td
       _ -> Nothing
   }
 

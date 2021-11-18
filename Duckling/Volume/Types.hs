@@ -30,6 +30,8 @@ data Unit
   | Litre
   | Centilitre
   | Millilitre
+  | CubicMetre
+  | CubicKiloMetre
   deriving (Eq, Generic, Hashable, Ord, Show, NFData)
 
 instance ToJSON Unit where

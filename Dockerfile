@@ -1,7 +1,7 @@
 FROM haskell:8-buster AS builder
 
 RUN apt-get update -qq && \
-  apt-get install -qq -y libssl-dev libpcre3 libpcre3-dev build-essential --fix-missing --no-install-recommends && \
+  apt-get install -qq -y libssl-dev libpcre3 libpcre3-dev build-essential pkg-config --fix-missing --no-install-recommends && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -27,7 +27,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update -qq && \
   apt-get dist-upgrade -qq -y --no-install-recommends && \
-  apt-get install -qq -y libpcre3 libgmp10 libssl-dev --no-install-recommends && \
+  apt-get install -qq -y libpcre3 libgmp10 libssl-dev pkg-config --no-install-recommends && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

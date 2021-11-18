@@ -33,11 +33,25 @@ ruleDurationNFiveMinutes = Rule
   { name = "number of five minutes"
   , pattern =
     [ Predicate isNatural
-    , regex "個字"
+    , regex "個字|个字"
     ]
   , prod = \case
       (Token Numeral NumeralData{TNumeral.value = v}:_) ->
         Just $ Token Duration $ duration TG.Minute $ floor v * 5
+      _ -> Nothing
+  }
+
+
+ruleDurationQuarterOfHour :: Rule
+ruleDurationQuarterOfHour = Rule
+  { name = "quarter of an hour"
+  , pattern =
+    [ Predicate isNatural
+    , regex "刻钟"
+    ]
+  , prod = \case
+      (Token Numeral NumeralData{TNumeral.value = v}:_) ->
+        Just $ Token Duration $ duration TG.Minute $ floor v * 15
       _ -> Nothing
   }
 
@@ -57,7 +71,7 @@ ruleDurationOneGrainAndHalf :: Rule
 ruleDurationOneGrainAndHalf = Rule
   { name = "a <unit-of-duration> and a half"
   , pattern =
-    [ regex "一個半|個半"
+    [ regex "一個半|個半|一个半|个半"
     , dimension TimeGrain
     ]
   , prod = \case
@@ -97,7 +111,7 @@ ruleDurationAndHalfGrain2 = Rule
   { name = "<integer> and a half <unit-of-duration>"
   , pattern =
     [ Predicate isNatural
-    , regex "個半"
+    , regex "個半|个半"
     , dimension TimeGrain
     ]
   , prod = \case
@@ -128,7 +142,7 @@ ruleDurationDotNumeralHours2 = Rule
   { name = "number.number hours"
   , pattern =
     [ Predicate isNatural
-    , regex "點"
+    , regex "點|点"
     , Predicate isNatural
     , Predicate $ isGrain TG.Hour
     ]
@@ -164,7 +178,7 @@ ruleDurationDotNumeralMinutes2 = Rule
   { name = "number.number minutes"
   , pattern =
     [ Predicate isNatural
-    , regex "點"
+    , regex "點|点"
     , Predicate isNatural
     , Predicate $ isGrain TG.Minute
     ]
@@ -284,6 +298,7 @@ ruleCompositeDurationAnd = Rule
 rules :: [Rule]
 rules =
   [ ruleDurationNFiveMinutes
+  , ruleDurationQuarterOfHour
   , ruleDurationHalfATimeGrain
   , ruleDurationOneGrainAndHalf
   , ruleDurationOneGrainAndHalf2

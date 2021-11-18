@@ -64,6 +64,45 @@ ruleDistKm = Rule
       _ -> Nothing
   }
 
+ruleDistMm :: Rule
+ruleDistMm = Rule
+  { name = "<dist> mm"
+  , pattern =
+    [ dimension Distance
+    , regex "mm|毫米"
+    ]
+  , prod = \case
+      (Token Distance dd:_) ->
+        Just . Token Distance $ withUnit TDistance.Millimetre  dd
+      _ -> Nothing
+  }
+
+ruleDistDm :: Rule
+ruleDistDm = Rule
+  { name = "<dist> dm"
+  , pattern =
+    [ dimension Distance
+    , regex "dm|分米"
+    ]
+  , prod = \case
+      (Token Distance dd:_) ->
+        Just . Token Distance $ withUnit TDistance.Decimetre  dd
+      _ -> Nothing
+  }
+
+ruleDistYd :: Rule
+ruleDistYd = Rule
+  { name = "<dist> yd"
+  , pattern =
+    [ dimension Distance
+    , regex "yard(s)?|yd(s)?|码"
+    ]
+  , prod = \case
+      (Token Distance dd:_) ->
+        Just . Token Distance $ withUnit TDistance.Yard dd
+      _ -> Nothing
+  }
+
 
 ruleDistFeetAndDistInch :: Rule
 ruleDistFeetAndDistInch = Rule
@@ -236,6 +275,9 @@ rulePrecision = Rule
 rules :: [Rule]
 rules =
   [ ruleDistCentimeters
+  , ruleDistYd
+  , ruleDistDm
+  , ruleDistMm
   , ruleDistFeet
   , ruleDistFeetAndDistInch
   , ruleDistInch

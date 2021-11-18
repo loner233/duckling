@@ -31,7 +31,7 @@ ruleInteger :: Rule
 ruleInteger = Rule
   { name = "integer (0..10)"
   , pattern =
-    [ regex "(〇|零|一|二|两|兩|三|四|五|六|七|八|九|十|壹|貳|參|肆|伍|陸|柒|捌|玖|拾)"
+    [ regex "(〇|零|一|二|两|兩|俩|三|仨|四|五|六|七|八|九|十|壹|贰|貳|叁|參|肆|伍|陆|陸|柒|捌|玖|拾)"
     ]
   , prod = \case
       (Token RegexMatch (GroupMatch (match:_)):_) ->
@@ -47,16 +47,21 @@ integerMap = HashMap.fromList
   , ( "壹", 1 )
   , ( "兩", 2 )
   , ( "两", 2 )
+  , ( "俩", 2 )
   , ( "二", 2 )
+  , ( "贰", 2)
   , ( "貳", 2 )
   , ( "三", 3 )
+  , ( "仨", 3 )
   , ( "參", 3 )
+  , ( "叁", 3 )
   , ( "四", 4 )
   , ( "肆", 4 )
   , ( "五", 5 )
   , ( "伍", 5 )
   , ( "六", 6 )
   , ( "陸", 6 )
+  , ( "陆", 6 )
   , ( "七", 7 )
   , ( "柒", 7 )
   , ( "八", 8 )
@@ -106,7 +111,7 @@ ruleNumeralsPrefixWithNegativeOrMinus :: Rule
 ruleNumeralsPrefixWithNegativeOrMinus = Rule
   { name = "numbers prefix with -, negative or minus"
   , pattern =
-    [ regex "-|负|負"
+    [ regex "-|负|負|零下"
     , Predicate isPositive
     ]
   , prod = \case
@@ -142,7 +147,7 @@ ruleDotSpelledOut = Rule
   { name = "one point 2"
   , pattern =
     [ dimension Numeral
-    , regex "點"
+    , regex "點|点"
     , Predicate $ not . hasGrain
     ]
   , prod = \tokens -> case tokens of
@@ -166,6 +171,19 @@ ruleFraction = Rule
        _) -> double $ v2 / v1
       _ -> Nothing
   }
+
+rulePercentage :: Rule
+rulePercentage = Rule
+  { name = "percentage"
+  , pattern =
+    [ dimension Numeral
+    , regex "%"
+    ]
+  , prod = \tokens -> case tokens of
+      (Token Numeral NumeralData{TNumeral.value = v1}:_) -> double $ v1 / 100
+      _ -> Nothing
+  }
+
 
 ruleMixedFraction :: Rule
 ruleMixedFraction = Rule
@@ -223,7 +241,7 @@ rulePair :: Rule
 rulePair = Rule
   { name = "a pair"
   , pattern =
-    [ regex "雙|對"
+    [ regex "雙|對|对"
     ]
   , prod = \_ -> integer 2 >>= withMultipliable >>= notOkForAnyTime
   }
@@ -376,6 +394,7 @@ rules =
   , ruleDozen
   , rulePair
   , ruleFraction
+  , rulePercentage
   , ruleMixedFraction
   , ruleHundredPrefix
   , ruleThousandPrefix

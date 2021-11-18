@@ -31,9 +31,18 @@ ruleCNY :: Rule
 ruleCNY = Rule
   { name = "cny"
   , pattern =
-    [ regex "人民币|人民幣"
+    [ regex "元|圆|来块|块|人民币|人民幣"
     ]
   , prod = \_ -> Just $ Token AmountOfMoney $ currencyOnly CNY
+  }
+
+ruleDollar :: Rule
+ruleDollar = Rule
+  { name = "dollar"
+  , pattern =
+    [ regex "美元|美刀|刀"
+    ]
+  , prod = \_ -> Just $ Token AmountOfMoney $ currencyOnly USD
   }
 
 ruleCNYPrefix :: Rule
@@ -53,7 +62,7 @@ ruleHKD :: Rule
 ruleHKD = Rule
   { name = "HKD"
   , pattern =
-    [ regex "港幣"
+    [ regex "港(幣|币)"
     ]
   , prod = \_ -> Just $ Token AmountOfMoney $ currencyOnly HKD
   }
@@ -62,7 +71,7 @@ ruleHKDPrefix :: Rule
 ruleHKDPrefix = Rule
   { name = "hkd prefix"
   , pattern =
-    [ regex "港幣"
+    [ regex "港(幣|币)"
     , Predicate isPositive
     ]
   , prod = \case
@@ -94,14 +103,6 @@ ruleDime = Rule
       _ -> Nothing
   }
 
-ruleDollar :: Rule
-ruleDollar = Rule
-  { name = "dollar"
-  , pattern =
-    [ regex "元|圆|块|蚊|個"
-    ]
-  , prod = \_ -> Just $ Token AmountOfMoney $ currencyOnly Dollar
-  }
 
 rulePrecision :: Rule
 rulePrecision = Rule
@@ -174,7 +175,7 @@ ruleIntersect = Rule
   { name = "intersect (implicit 0 delimited cents)"
   , pattern =
     [ Predicate $ and . sequence [isSimpleAmountOfMoney, isWithoutCents]
-    , regex "0|零|〇"
+    , regex "零|〇"
     , oneOf [1..9]
     ]
   , prod = \case
@@ -216,7 +217,7 @@ ruleOneDollarAndAHalf :: Rule
 ruleOneDollarAndAHalf = Rule
   { name = "one dollar and a half (short form)"
   , pattern =
-    [ regex "個半"
+    [ regex "個半|个半"
     ]
   , prod = \_ -> Just $ Token AmountOfMoney $ withValue 1.5 (currencyOnly Dollar)
   }
@@ -225,7 +226,7 @@ ruleOneDollarAnd :: Rule
 ruleOneDollarAnd = Rule
   { name = "one dollar and x dimes (short form)"
   , pattern =
-    [ regex "個"
+    [ regex "個|个"
     , numberBetween 1 10
     ]
   , prod = \case
@@ -275,7 +276,7 @@ ruleIntervalBound :: Rule
 ruleIntervalBound = Rule
   { name = "under/less/lower/no more than <amount-of-money> (最多|至少|最少)"
   , pattern =
-    [ regex "(最多|至少|最少|起碼)"
+    [ regex "(最多|至少|最少|起码)"
     , Predicate isSimpleAmountOfMoney
     ]
   , prod = \case
@@ -286,7 +287,7 @@ ruleIntervalBound = Rule
         "最多" -> Just $ Token AmountOfMoney $ withMax to $ currencyOnly c
         "最少" -> Just $ Token AmountOfMoney $ withMin to $ currencyOnly c
         "至少" -> Just $ Token AmountOfMoney $ withMin to $ currencyOnly c
-        "起碼" -> Just $ Token AmountOfMoney $ withMin to $ currencyOnly c
+        "起码" -> Just $ Token AmountOfMoney $ withMin to $ currencyOnly c
         _ -> Nothing
       _ -> Nothing
   }

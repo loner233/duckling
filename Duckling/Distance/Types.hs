@@ -30,6 +30,7 @@ data Unit
   | Foot
   | Inch
   | Kilometre
+  | Decimetre
   | M -- ambiguous between Mile and Metre
   | Metre
   | Mile

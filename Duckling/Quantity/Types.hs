@@ -31,6 +31,11 @@ data Unit
   | Custom Text
   | Dish
   | Gram
+  | MilliGram
+  | KiloGram
+  | Ton
+  | Jin
+  | Liang
   | Ounce
   | Pint
   | Pound

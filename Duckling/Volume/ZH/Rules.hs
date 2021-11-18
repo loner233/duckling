@@ -24,9 +24,11 @@ import qualified Duckling.Volume.Types as TVolume
 import qualified Duckling.Numeral.Types as TNumeral
 
 volumes :: [(Text, String, TVolume.Unit)]
-volumes = [ ("<latent vol> ml", "cc|ml|毫升", TVolume.Millilitre)
+volumes = [ ("<latent vol> ml", "cc|CC|ml|ML|毫升|立方厘米", TVolume.Millilitre)
           , ("<vol> liters", "l|L|公升|升", TVolume.Litre)
-          , ("<latent vol> gallon", "加侖", TVolume.Gallon)
+          , ("<latent vol> gallon", "gallon|Gallon|GALLON|加侖|加仑", TVolume.Gallon)
+          , ("<latent vol> m³", "立方米|m³", TVolume.CubicMetre)
+          , ("<latent vol> km³", "立方千米|km³", TVolume.CubicKiloMetre)
           ]
 
 rulesVolumes :: [Rule]

@@ -30,20 +30,32 @@ import qualified Duckling.Quantity.Types as TQuantity
 
 quantities :: [(Text, String, TQuantity.Unit)]
 quantities =
-  [ ("<quantity> grams", "(千克|公斤|斤|两|兩|克|毫克|kg|g|mg)", TQuantity.Gram)
+  [ ("<quantity> milliGram", "(毫克|mg|MG)", TQuantity.MilliGram )
+  , ("<quantity> grams", "(克|g|G)", TQuantity.Gram)
+  , ("<quantity> kiloGram", "(千克|kg|KG|公斤)", TQuantity.KiloGram )
+  , ("<quantity> ton", "(吨|t|T)", TQuantity.Ton )
+  , ("<quantity> jin", "(斤)", TQuantity.Jin )
+  , ("<quantity> liang", "(两|兩)", TQuantity.Liang )
   ]
 
 opsMap :: HashMap Text (Double -> Double)
 opsMap = HashMap.fromList
-  [ ( "千克" , (* 1000))
-  , ( "公斤",  (* 1000))
-  , ( "kg",   (* 1000))
-  , ( "斤",    (* 500))
-  , ( "两",    (* 50))
-  , ( "兩",    (* 50))
-  , ( "毫克",  (/ 1000))
-  , ( "mg",   (/ 1000))
+  [ ( "千克" , (* 1))
+  , ( "公斤",  (* 1))
+  , ( "kg",   (* 1))
+  , ( "KG",   (* 1))
+  , ( "斤",    (* 1))
+  , ( "两",    (* 1))
+  , ( "兩",    (* 1))
+  , ( "毫克",  (* 1))
+  , ( "mg",   (* 1))
+  , ( "MG",   (* 1))
+  , ( "吨",   (* 1))
+  , ( "t",    (* 1))
+  , ( "T",    (* 1))
+
   ]
+
 
 ruleNumeralQuantities :: [Rule]
 ruleNumeralQuantities = map go quantities
@@ -80,7 +92,7 @@ ruleCattyTael = Rule
      Token RegexMatch (GroupMatch _):
      Token Numeral TNumeral.NumeralData{TNumeral.value = y}:
      Token RegexMatch (GroupMatch _):
-     _) -> Just . Token Quantity $ quantity TQuantity.Gram (x * 500 + y * 50)
+     _) -> Just . Token Quantity $ quantity TQuantity.Jin (x + y / 10)
     _ -> Nothing
   }
 
@@ -94,7 +106,7 @@ ruleCattyHalf = Rule
   , prod = \case
     (Token Numeral TNumeral.NumeralData{TNumeral.value = x}:
      Token RegexMatch (GroupMatch _):
-     _) -> Just . Token Quantity $ quantity TQuantity.Gram (x * 500 + 250)
+     _) -> Just . Token Quantity $ quantity TQuantity.Jin (x + 0.5)
     _ -> Nothing
   }
 
@@ -108,7 +120,7 @@ ruleTaelHalf = Rule
   , prod = \case
     (Token Numeral TNumeral.NumeralData{TNumeral.value = x}:
      Token RegexMatch (GroupMatch _):
-     _) -> Just . Token Quantity $ quantity TQuantity.Gram (x * 50 + 25)
+     _) -> Just . Token Quantity $ quantity TQuantity.Liang (x + 0.5)
     _ -> Nothing
   }
 
