@@ -325,10 +325,10 @@ rules =
   , ruleIntersectDimesAndCents
   , ruleIntersectDollarsAndDimesCents
   , ruleIntersectDollarsAndAHalf
-  , ruleIntervalDash
-  , ruleIntervalNumeralDash
-  , ruleIntervalBound
-  , ruleIntervalBound2
+  -- , ruleIntervalDash
+  -- , ruleIntervalNumeralDash
+  -- , ruleIntervalBound
+  -- , ruleIntervalBound2
   , rulePrecision
   , rulePrecision2
   , ruleOneDollarAndAHalf

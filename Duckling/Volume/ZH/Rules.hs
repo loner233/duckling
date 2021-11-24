@@ -198,11 +198,11 @@ rules = [ ruleUnitTeaspoon
         , ruleUnitSoupspoon
         , rulePrecision
         , rulePrecision2
-        , ruleIntervalBetweenNumeral
-        , ruleIntervalBetween
-        , ruleIntervalMax
-        , ruleIntervalMax2
-        , ruleIntervalMin
-        , ruleIntervalMin2
+        -- , ruleIntervalBetweenNumeral
+        -- , ruleIntervalBetween
+        -- , ruleIntervalMax
+        -- , ruleIntervalMax2
+        -- , ruleIntervalMin
+        -- , ruleIntervalMin2
         ]
         ++ rulesVolumes

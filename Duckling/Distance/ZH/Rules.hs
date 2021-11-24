@@ -288,9 +288,9 @@ rules =
   , ruleDistMetersAnd
   , ruleDistOneMeterAnd
   , ruleDistMetersAnd
-  , ruleIntervalNumeralDash
-  , ruleIntervalDash
-  , ruleIntervalBound
-  , ruleIntervalBound2
+  -- , ruleIntervalNumeralDash
+  -- , ruleIntervalDash
+  -- , ruleIntervalBound
+  -- , ruleIntervalBound2
   , rulePrecision
   ]
